@@ -1,0 +1,12 @@
+# Normalizar fin de línea
+* text=auto
+
+# La web señuelo (5 MB de base64) no cuenta para estadísticas de lenguaje
+web/el-heraldo-pyongyang/index.html linguist-vendored=true
+
+# Clasificaciones explícitas
+src/ztt_framework.py linguist-language=Python
+src/preparar.sh linguist-language=Shell
+config/wazuh/local_rules.xml linguist-language=XML
+config/wazuh/tpot_decoders.xml linguist-language=XML
+config/opnsense/rollback-demo.sh linguist-language=Shell

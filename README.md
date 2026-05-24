@@ -9,14 +9,26 @@
 
 ---
 
-[![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-yellow?style=flat-square)](LICENSE)
-[![Tool ZTT v1.1](https://img.shields.io/badge/Tool_ZTT-v1.1-cc0000?style=flat-square)](src/ztt_framework.py)
-[![Wazuh](https://img.shields.io/badge/Wazuh-4.14.1-005571?style=flat-square)](config/wazuh/)
-[![OPNsense](https://img.shields.io/badge/OPNsense-Firewall_NGFW-d94f00?style=flat-square)](config/opnsense/)
-[![T-Pot](https://img.shields.io/badge/T--Pot-v24.04.1-8b0000?style=flat-square)](config/)
-[![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat-square&logo=python&logoColor=white)](src/)
-[![ASIR](https://img.shields.io/badge/ASIR-IES_Valle_Inclán_2025--2026-6f42c1?style=flat-square)](#)
-[![Security Scan](https://github.com/devPruebaDataunix/tfg-soc-zerotrust/actions/workflows/security-scan.yml/badge.svg?style=flat-square)](https://github.com/devPruebaDataunix/tfg-soc-zerotrust/actions/workflows/security-scan.yml)
+[![Wazuh](https://img.shields.io/badge/Wazuh-4.14.1-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)](config/wazuh/)
+[![OPNsense](https://img.shields.io/badge/OPNsense-Firewall_NGFW-d94f00?style=for-the-badge)](config/opnsense/)
+[![T‑Pot](https://img.shields.io/badge/T--Pot-v24.04.1-8b0000?style=for-the-badge&logo=docker&logoColor=white)](config/)
+[![Suricata](https://img.shields.io/badge/Suricata-8.0.4_IDS-EF3B2D?style=for-the-badge)](config/opnsense/)
+[![Fail2Ban](https://img.shields.io/badge/Fail2Ban-0.11.1-FF6600?style=for-the-badge&logo=gnubash&logoColor=white)](config/fail2ban/)
+[![Nginx](https://img.shields.io/badge/Nginx-1.18.0-009639?style=for-the-badge&logo=nginx&logoColor=white)](config/nginx/)
+
+[![Tool ZTT v1.1](https://img.shields.io/badge/Tool_ZTT-v1.1-cc0000?style=for-the-badge&logo=python&logoColor=white)](src/ztt_framework.py)
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](src/)
+[![XML](https://img.shields.io/badge/XML-Wazuh_Rules-005571?style=for-the-badge)](config/wazuh/local_rules.xml)
+[![Shell](https://img.shields.io/badge/Shell-Bash_Scripts-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)](src/preparar.sh)
+[![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-yellow?style=for-the-badge)](LICENSE)
+[![CI](https://img.shields.io/badge/Security_Scan-Activo-2ea44f?style=for-the-badge&logo=githubactions&logoColor=white)](.github/workflows/security-scan.yml)
+
+[![TFG](https://img.shields.io/badge/TFG-ASIR_2025--2026-6f42c1?style=for-the-badge)](#)
+[![IES Valle Inclán](https://img.shields.io/badge/IES_Valle_Inclán-Madrid-6f42c1?style=for-the-badge)](#)
+[![SOC](https://img.shields.io/badge/SOC-Security_Operations_Center-dc3545?style=for-the-badge)](#)
+[![SIEM](https://img.shields.io/badge/SIEM-Detección_Distribuida-005571?style=for-the-badge)](#)
+[![Zero Trust](https://img.shields.io/badge/Zero_Trust-NIST_800--207-0075ca?style=for-the-badge)](#)
+[![Ciberseguridad](https://img.shields.io/badge/Ciberseguridad-Open_Source-198754?style=for-the-badge)](#)
 
 </div>
 
@@ -24,14 +36,14 @@
 
 <div align="center">
 
-[![Inicio Rápido](https://img.shields.io/badge/Inicio_Rápido-2ea44f?style=flat-square&logo=rocket&logoColor=white)](#instalación-del-laboratorio)
-[![Arquitectura](https://img.shields.io/badge/Arquitectura-0075ca?style=flat-square)](#arquitectura)
-[![11 VMs](https://img.shields.io/badge/11_Máquinas_Virtuales-343a40?style=flat-square)](#infraestructura)
-[![9 Fases ZTT](https://img.shields.io/badge/9_Fases_de_Ataque-dc3545?style=flat-square)](#fases-de-la-tool-ztt-v11)
-[![29 TP · 0 FP](https://img.shields.io/badge/Detección-29_TP_·_0_FP-198754?style=flat-square)](#resultados-de-validación)
-[![Demo](https://img.shields.io/badge/Demo_ZTT-Espectáculo-e83e8c?style=flat-square)](#demo-tool-ztt-v11)
-[![Memoria TFG](https://img.shields.io/badge/Memoria_TFG-PDF-6f42c1?style=flat-square)](docs/)
-[![Configuraciones](https://img.shields.io/badge/Configuraciones-Completas-fd7e14?style=flat-square)](config/)
+[![Inicio Rápido](https://img.shields.io/badge/🚀_Inicio_Rápido-2ea44f?style=for-the-badge)](#instalación-del-laboratorio)
+[![Arquitectura](https://img.shields.io/badge/Arquitectura-0075ca?style=for-the-badge)](#arquitectura)
+[![11 VMs](https://img.shields.io/badge/11_Máquinas_Virtuales-343a40?style=for-the-badge)](#infraestructura)
+[![9 Fases ZTT](https://img.shields.io/badge/9_Fases_de_Ataque-dc3545?style=for-the-badge)](#fases-de-la-tool-ztt-v11)
+[![29 TP · 0 FP](https://img.shields.io/badge/Detección-29_TP_·_0_FP-198754?style=for-the-badge)](#resultados-de-validación)
+[![Demo ZTT](https://img.shields.io/badge/Demo_ZTT-Espectáculo-e83e8c?style=for-the-badge)](#demo-tool-ztt-v11)
+[![Memoria TFG](https://img.shields.io/badge/Memoria_TFG-PDF-6f42c1?style=for-the-badge)](docs/)
+[![Configuraciones](https://img.shields.io/badge/Configuraciones-Completas-fd7e14?style=for-the-badge)](config/)
 
 </div>
 
