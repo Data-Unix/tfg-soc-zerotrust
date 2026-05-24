@@ -11,23 +11,25 @@
 ---
 
 [![Wazuh](https://img.shields.io/badge/Wazuh-4.14.1-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)](config/wazuh/)
-[![OPNsense](https://img.shields.io/badge/OPNsense-Firewall_NGFW-d94f00?style=for-the-badge)](config/opnsense/)
+[![OPNsense](https://img.shields.io/badge/OPNsense-Firewall_NGFW-d94f00?style=for-the-badge&logo=opnsense&logoColor=white)](config/opnsense/)
 [![T‑Pot](https://img.shields.io/badge/T--Pot-v24.04.1-8b0000?style=for-the-badge&logo=docker&logoColor=white)](config/)
-[![Suricata](https://img.shields.io/badge/Suricata-8.0.4_IDS-EF3B2D?style=for-the-badge)](config/opnsense/)
+[![Suricata](https://img.shields.io/badge/Suricata-8.0.4_IDS-EF3B2D?style=for-the-badge&logo=suricata&logoColor=white)](config/opnsense/)
 [![Fail2Ban](https://img.shields.io/badge/Fail2Ban-0.11.1-FF6600?style=for-the-badge&logo=gnubash&logoColor=white)](config/fail2ban/)
 [![Nginx](https://img.shields.io/badge/Nginx-1.18.0-009639?style=for-the-badge&logo=nginx&logoColor=white)](config/nginx/)
 
-[![Tool ZTT v1.1](https://img.shields.io/badge/Tool_ZTT-v1.1-cc0000?style=for-the-badge&logo=python&logoColor=white)](src/ztt_framework.py)
+[![Tool ZTT](https://img.shields.io/badge/Tool_ZTT-Verificación-cc0000?style=for-the-badge&logo=python&logoColor=white)](src/ztt_framework.py)
 [![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](src/)
 [![XML](https://img.shields.io/badge/XML-Wazuh_Rules-005571?style=for-the-badge)](config/wazuh/local_rules.xml)
 [![Shell](https://img.shields.io/badge/Shell-Bash_Scripts-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)](src/preparar.sh)
 [![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-yellow?style=for-the-badge)](LICENSE)
 [![CI](https://img.shields.io/badge/Security_Scan-Activo-2ea44f?style=for-the-badge&logo=githubactions&logoColor=white)](.github/workflows/security-scan.yml)
 
-[![TFG](https://img.shields.io/badge/TFG-ASIR_2025--2026-6f42c1?style=for-the-badge)](#)
+[![TFG](https://img.shields.io/badge/TFG-2025--2026-6f42c1?style=for-the-badge)](#)
+[![ASIR](https://img.shields.io/badge/ASIR-Ciclo_Superior-6f42c1?style=for-the-badge)](#)
 [![IES Valle Inclán](https://img.shields.io/badge/IES_Valle_Inclán-Madrid-6f42c1?style=for-the-badge)](#)
 [![SOC](https://img.shields.io/badge/SOC-Security_Operations_Center-dc3545?style=for-the-badge)](#)
 [![SIEM](https://img.shields.io/badge/SIEM-Detección_Distribuida-005571?style=for-the-badge)](#)
+[![IDS](https://img.shields.io/badge/IDS-Detección_Intrusiones-EF3B2D?style=for-the-badge)](#)
 [![Zero Trust](https://img.shields.io/badge/Zero_Trust-NIST_800--207-0075ca?style=for-the-badge)](#)
 [![Ciberseguridad](https://img.shields.io/badge/Ciberseguridad-Open_Source-198754?style=for-the-badge)](#)
 
