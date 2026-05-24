@@ -16,6 +16,7 @@
 [![T-Pot](https://img.shields.io/badge/T--Pot-v24.04.1-8b0000?style=flat-square)](config/)
 [![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat-square&logo=python&logoColor=white)](src/)
 [![ASIR](https://img.shields.io/badge/ASIR-IES_Valle_Inclán_2025--2026-6f42c1?style=flat-square)](#)
+[![Security Scan](https://github.com/devPruebaDataunix/tfg-soc-zerotrust/actions/workflows/security-scan.yml/badge.svg?style=flat-square)](https://github.com/devPruebaDataunix/tfg-soc-zerotrust/actions/workflows/security-scan.yml)
 
 </div>
 
@@ -52,7 +53,17 @@ El sistema replica los principios del **NIST SP 800-207** (*Zero Trust Architect
 
 <div align="center">
 
-![Demo ZTT espectáculo](media/demo-ztt-espectaculo.gif)
+| Fase | Vector | Herramienta | Resultado |
+|------|--------|-------------|-----------|
+| **0** | Check status | ping / socket | `3/3 ONLINE` |
+| **1** | Recon puertos | RustScan 2.3.0 | 7 puertos descubiertos |
+| **2** | Enumeración web | ffuf v2.1.0-dev | `100014` ×19 alertas |
+| **3** | Honeypot SSH éxito | Hydra v9.6 | `100011` → **AR bloquea en < 5 s** |
+| **4** | Honeypot SSH fallo | ssh -b (IP alias) | `100040` → **AR bloquea perímetro** |
+| **5** | Rollback PF | rollback-demo.sh | tabla `__wazuh_agent_drop` vaciada |
+| **6** | Fail2Ban doble capa | ssh -b (IP alias) | `100040` → **iptables + PF simultáneo** |
+| **7** | Rollback Fail2Ban | fail2ban-client | jail sshd liberado |
+| **8** | Dionaea SMB+MSSQL | impacket | `100020` ×2 alertas |
 
 *La herramienta activa Cowrie, Dionaea, Fail2Ban, Suricata y el Active Response de Wazuh→OPNsense en una secuencia reproducible de principio a fin.*
 
@@ -76,13 +87,49 @@ sudo python3 src/ztt_framework.py --fase 8
 
 ## Arquitectura
 
-<div align="center">
-
-![Arquitectura de red](media/architecture.png)
-
-</div>
-
 La arquitectura segmenta la red en **cuatro zonas de distinto nivel de confianza**:
+
+```mermaid
+graph TB
+    subgraph WAN["🌐  WAN — 203.0.113.0/24  (no confiable)"]
+        INET[Internet simulado · RFC 5737]
+    end
+
+    subgraph FW["🔥  VM101 OPNsense — Gateway único entre todas las redes"]
+        OPNS["OPNsense · PF · Suricata 8.0.4 IDS · Active Response\n172.18.0.1 / 172.17.0.1 / 172.16.0.1 / 203.0.113.10"]
+    end
+
+    subgraph DMZ["🟡  LAN_DMZ — 172.17.0.0/24  (confianza baja)"]
+        VM100["VM100 · Kali 2025.4\n172.17.0.167 · Tool ZTT v1.1"]
+        VM103["VM103 · Nginx + Fail2Ban\n172.17.0.13 · Agente 008"]
+        VM106["VM106 · T-Pot v24.04.1\n172.17.0.16 · Cowrie · Dionaea · Agente 010"]
+        VM108["VM108 · NPM 2.14.0\n172.17.0.15 · Reverse Proxy · SSL"]
+        VM109["VM109 · Mail Server\n172.17.0.20 · docker-mailserver"]
+    end
+
+    subgraph INT["🟢  LAN_INTERNA — 172.18.0.0/24  (confianza media-alta)"]
+        VM102["VM102 · Wazuh 4.14.1\n172.18.0.12 · SIEM central"]
+        VM104["VM104 · Win10 LTSC\n172.18.0.56 · Agente 011"]
+        VM105["VM105 · WinServer 2022\n172.18.0.20 · AD DC01 · Agente 012"]
+        VM107["VM107 · Authentik 2026.2.2\n172.18.0.14 · IdP · SSO"]
+    end
+
+    subgraph MNG["🔵  LAN_MNG — 172.16.0.0/24  (confianza alta)"]
+        PROX["Proxmox VE\n172.16.0.10"]
+        VM110["VM110 · Guacamole 1.6.0\n172.16.0.11 · RDP + SSH"]
+    end
+
+    INET <-->|vtnet0| OPNS
+    OPNS <-->|vtnet1| DMZ
+    OPNS <-->|vtnet2| INT
+    OPNS <-->|vtnet3| MNG
+
+    VM106 -.->|"Agente 010 → alertas"| VM102
+    VM103 -.->|"Agente 008 → alertas"| VM102
+    VM104 -.->|"Agente 011 → alertas"| VM102
+    VM105 -.->|"Agente 012 → alertas"| VM102
+    VM102 ==>|"AR opnsense-fw → pfctl"| OPNS
+```
 
 | Red | Segmento | Nivel de confianza | Hosts |
 |-----|----------|--------------------|-------|
