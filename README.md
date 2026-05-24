@@ -40,7 +40,6 @@
 [![Arquitectura](https://img.shields.io/badge/Arquitectura-0075ca?style=for-the-badge)](#arquitectura)
 [![11 VMs](https://img.shields.io/badge/11_Máquinas_Virtuales-343a40?style=for-the-badge)](#infraestructura)
 [![9 Fases ZTT](https://img.shields.io/badge/9_Fases_de_Ataque-dc3545?style=for-the-badge)](#fases-de-la-tool-ztt-v11)
-[![29 TP · 0 FP](https://img.shields.io/badge/Detección-29_TP_·_0_FP-198754?style=for-the-badge)](#resultados-de-validación)
 [![Demo ZTT](https://img.shields.io/badge/Demo_ZTT-Espectáculo-e83e8c?style=for-the-badge)](#demo-tool-ztt-v11)
 [![Memoria TFG](https://img.shields.io/badge/Memoria_TFG-PDF-6f42c1?style=for-the-badge)](docs/)
 [![Configuraciones](https://img.shields.io/badge/Configuraciones-Completas-fd7e14?style=for-the-badge)](config/)
