@@ -62,6 +62,8 @@ Sesiones-Datos/
 Arquitectura-Resumenes/
 copy_vms.py
 *.drawio.bak
+*.dtmp
+.$*.dtmp
 
 # ──────────────────────────────────────────────────────────────────
 # PYTHON
