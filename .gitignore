@@ -166,7 +166,7 @@ Session.vim
 .netrwhist
 
 # ──────────────────────────────────────────────────────────────────
-# DOCKER (si se usan contenedores localmente)
+# DOCKER
 # ──────────────────────────────────────────────────────────────────
 .docker/
 docker-compose.override.yml
