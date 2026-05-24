@@ -101,47 +101,11 @@ sudo python3 src/ztt_framework.py --fase 8
 
 La arquitectura segmenta la red en **cuatro zonas de distinto nivel de confianza**:
 
-```mermaid
-graph TB
-    subgraph WAN["🌐  WAN — 203.0.113.0/24  (no confiable)"]
-        INET[Internet simulado · RFC 5737]
-    end
+<div align="center">
 
-    subgraph FW["🔥  VM101 OPNsense — Gateway único entre todas las redes"]
-        OPNS["OPNsense · PF · Suricata 8.0.4 IDS · Active Response\n172.18.0.1 / 172.17.0.1 / 172.16.0.1 / 203.0.113.10"]
-    end
+![Arquitectura SOC Zero Trust](media/architecture.png)
 
-    subgraph DMZ["🟡  LAN_DMZ — 172.17.0.0/24  (confianza baja)"]
-        VM100["VM100 · Kali 2025.4\n172.17.0.167 · Tool ZTT"]
-        VM103["VM103 · Nginx + Fail2Ban\n172.17.0.13 · Agente 008"]
-        VM106["VM106 · T-Pot v24.04.1\n172.17.0.16 · Cowrie · Dionaea · Agente 010"]
-        VM108["VM108 · NPM 2.14.0\n172.17.0.15 · Reverse Proxy · SSL"]
-        VM109["VM109 · Mail Server\n172.17.0.20 · docker-mailserver"]
-    end
-
-    subgraph INT["🟢  LAN_INTERNA — 172.18.0.0/24  (confianza media-alta)"]
-        VM102["VM102 · Wazuh 4.14.1\n172.18.0.12 · SIEM central"]
-        VM104["VM104 · Win10 LTSC\n172.18.0.56 · Agente 011"]
-        VM105["VM105 · WinServer 2022\n172.18.0.20 · AD DC01 · Agente 012"]
-        VM107["VM107 · Authentik 2026.2.2\n172.18.0.14 · IdP · SSO"]
-    end
-
-    subgraph MNG["🔵  LAN_MNG — 172.16.0.0/24  (confianza alta)"]
-        PROX["Proxmox VE\n172.16.0.10"]
-        VM110["VM110 · Guacamole 1.6.0\n172.16.0.11 · RDP + SSH"]
-    end
-
-    INET <-->|vtnet0| OPNS
-    OPNS <-->|vtnet1| DMZ
-    OPNS <-->|vtnet2| INT
-    OPNS <-->|vtnet3| MNG
-
-    VM106 -.->|"Agente 010 → alertas"| VM102
-    VM103 -.->|"Agente 008 → alertas"| VM102
-    VM104 -.->|"Agente 011 → alertas"| VM102
-    VM105 -.->|"Agente 012 → alertas"| VM102
-    VM102 ==>|"AR opnsense-fw → pfctl"| OPNS
-```
+</div>
 
 | Red | Segmento | Nivel de confianza | Hosts |
 |-----|----------|--------------------|-------|
