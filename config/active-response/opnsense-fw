@@ -1,0 +1,25 @@
+#!/bin/sh
+# opnsense-fw — Wazuh Active Response script
+# Ubicación en VM101 (OPNsense): /var/ossec/active-response/bin/opnsense-fw
+#
+# Este script es ejecutado por el Agente Wazuh 009 en VM101 cuando
+# Wazuh Manager dispara una acción de Active Response por las reglas
+# 100011 (Cowrie SSH success, lvl 14) o 100040 (CRITICAL, lvl 15).
+#
+# Flujo:
+#   Wazuh Manager (VM102) → AR command → Agente 009 (VM101) → este script → pfctl
+#
+# Acción: añade la IP atacante a la tabla PF __wazuh_agent_drop
+# Latencia medida en laboratorio: < 5 segundos desde alerta hasta bloqueo
+
+ACTION=$1       # add / delete
+USER=$2         # usuario (no usado)
+IP=$3           # IP a bloquear
+
+if [ "$ACTION" = "add" ]; then
+    pfctl -t __wazuh_agent_drop -T add "$IP"
+    logger -t wazuh-ar "BLOCKED: $IP added to __wazuh_agent_drop"
+elif [ "$ACTION" = "delete" ]; then
+    pfctl -t __wazuh_agent_drop -T delete "$IP"
+    logger -t wazuh-ar "UNBLOCKED: $IP removed from __wazuh_agent_drop"
+fi

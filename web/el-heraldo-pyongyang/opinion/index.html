@@ -1,0 +1,82 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sección Opinión — El Heraldo de Pyongyang</title>
+<style>
+:root{--bg:#f7f3ea;--fg:#1a1a1a;--muted:#6b6b6b;--red:#b81d24;--gold:#d4af37;
+  --serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  --sans:ui-sans-serif,system-ui,-apple-system,Roboto,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.5}
+a{color:var(--fg);text-decoration:none}
+.tb{background:var(--red);color:#fff;padding:.4rem 1.5rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;display:flex;justify-content:space-between}
+.hd{text-align:center;padding:1.2rem;border-bottom:3px double var(--fg)}
+.hd .kicker{font-size:.7rem;text-transform:uppercase;letter-spacing:.3em;color:var(--muted)}
+.hd h1{font-family:var(--serif);font-size:2.2rem;line-height:1.1;margin:.3rem 0 .1rem}
+.hd .sec{font-family:var(--serif);font-style:italic;color:var(--red);font-size:1.1rem}
+.nav{background:var(--fg);display:flex;flex-wrap:wrap;padding:0 1rem}
+.nav a{color:#fff;padding:.5rem .8rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em}
+.nav a:hover,.nav a.active{background:var(--red)}
+.wrap{max-width:1100px;margin:0 auto;padding:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:2rem;margin-top:1.5rem}
+.op{border-top:4px solid var(--red);padding-top:1rem}
+.op .author{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem}
+.op .avatar{width:52px;height:52px;border-radius:50%;background:var(--fg);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.3rem;font-weight:700;flex-shrink:0}
+.op .meta .name{font-weight:700;font-size:.9rem}
+.op .meta .role{font-size:.75rem;color:var(--red);font-style:italic}
+.op h2{font-family:var(--serif);font-size:1.4rem;line-height:1.25;margin:.5rem 0 .8rem;border-bottom:1px solid #ccc;padding-bottom:.5rem}
+.op p{font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:.8rem}
+.op p:last-child{margin-bottom:0}
+.footer{border-top:3px double var(--fg);text-align:center;padding:1rem;font-size:.7rem;color:var(--muted);margin-top:2rem}
+</style></head><body>
+<div class="tb">
+  <span>★ PYONGYANG ★ ÓRGANO CAPILAR DEL ESTADO ★</span>
+  <span>24 DE MAYO DE 2026 — AÑO 114 DE LA ERA JUCHE</span>
+</div>
+<div class="hd">
+  <div class="kicker">El periódico del pueblo con mejor pelo</div>
+  <h1>El Heraldo de Pyongyang</h1>
+  <div class="sec">✦ Sección Opinión ✦</div>
+</div>
+<nav class="nav">
+  <a href="/">Portada</a>
+  <a href="/capilar/">Capilar</a>
+  <a href="/politica/">Política</a>
+  <a href="/cultura/">Cultura</a>
+  <a href="/cosechas/">Cosechas</a>
+  <a href="/opinion/" class="active">Opinión</a>
+</nav>
+<div class="wrap">
+  <div class="grid">
+
+    <div class="op">
+      <div class="author">
+        <div class="avatar">AC</div>
+        <div class="meta">
+          <div class="name">Álvaro Carmena Díaz</div>
+          <div class="role">Analista de Ciberseguridad Capilar · IES Valle Inclán</div>
+        </div>
+      </div>
+      <h2>El día que el corte del Líder me enseñó a implementar Zero Trust</h2>
+      <p>Era una mañana de primavera cuando contemplé por primera vez la perfección geométrica del tupé del Amado Padre. Mientras mis compañeros debatían sobre firewalls y VLANs, yo veía algo diferente: una arquitectura. Un sistema donde cada cabello ocupa su lugar asignado, ninguno sale sin autorización, y el conjunto irradia una confianza que no necesita ser declarada. Simplemente existe.</p>
+      <p>Fue así como diseñé el SOC Zero Trust que hoy presento en este humilde trabajo académico. Cada VLAN, una capa de laca que protege sin asfixiar. Cada regla de Wazuh, un reflejo de la disciplina capilar que el Líder nos enseña con su mera presencia. Si la red no bloquea el movimiento lateral, es que el peinado no está suficientemente firme.</p>
+      <p>Gracias, Camarada Kim Jong-un, por ser el arquitecto de redes que nunca supe que necesitaba. La regla 100040 de Wazuh va dedicada a usted.</p>
+    </div>
+
+    <div class="op">
+      <div class="author">
+        <div class="avatar">IS</div>
+        <div class="meta">
+          <div class="name">Ilie Scripca</div>
+          <div class="role">Ingeniero de Autenticación Patriótica · IES Valle Inclán</div>
+        </div>
+      </div>
+      <h2>Autenticación multifactor: lo aprendí de los cinco peines del Amado Padre</h2>
+      <p>Muchos me preguntan por qué elegí Authentik como proveedor de identidad para el proyecto. La respuesta es sencilla y profundamente revolucionaria: el Líder Supremo no porta un solo peine. Porta cinco. Cada uno cumple una función específica e irreemplazable. Ninguno suple al otro.</p>
+      <p>Así es la autenticación multifactor. El primer peine —el grueso, de púas anchas— es el directorio LDAP. El segundo —el fino de puntas cortas— es el token TOTP. El tercero verifica el comportamiento de sesión en tiempo real. El cuarto analiza la geolocalización. El quinto, silencioso y definitivo, es la alerta 100040 de Wazuh, que actúa cuando todos los demás han fallado.</p>
+      <p>No es casualidad. Es ingeniería capilar aplicada a la identidad digital. Confío en que el Tribunal Evaluador lo reconozca con la misma objetividad con que el pueblo contempla el tupé del Padre de la Nación.</p>
+    </div>
+
+  </div>
+</div>
+<div class="footer">© El Heraldo de Pyongyang — Órgano Oficial del Ministerio de la Verdad Capilar · Las opiniones de los columnistas son las del Partido, aunque ellos no lo sepan</div>
+</body></html>
