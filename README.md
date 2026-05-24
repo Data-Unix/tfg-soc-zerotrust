@@ -2,6 +2,7 @@
 
 # SOC Zero Trust
 ### Implementación de un SOC con Detección y Respuesta Activa Open Source
+#### AUTORES: Álvaro Carmena Díaz & Ilie Scripca
 
 *Detección distribuida · Respuesta activa automatizada · Honeypots · Zero Trust aplicado*
 
@@ -58,7 +59,7 @@ El sistema replica los principios del **NIST SP 800-207** (*Zero Trust Architect
 
 ---
 
-## Demo — Tool ZTT v1.1
+## Demo — Tool ZTT 
 
 > Ejecución completa en modo `--espectaculo`: 9 fases de ataque, detección distribuida y respuesta activa automatizada en tiempo real.
 
@@ -111,7 +112,7 @@ graph TB
     end
 
     subgraph DMZ["🟡  LAN_DMZ — 172.17.0.0/24  (confianza baja)"]
-        VM100["VM100 · Kali 2025.4\n172.17.0.167 · Tool ZTT v1.1"]
+        VM100["VM100 · Kali 2025.4\n172.17.0.167 · Tool ZTT"]
         VM103["VM103 · Nginx + Fail2Ban\n172.17.0.13 · Agente 008"]
         VM106["VM106 · T-Pot v24.04.1\n172.17.0.16 · Cowrie · Dionaea · Agente 010"]
         VM108["VM108 · NPM 2.14.0\n172.17.0.15 · Reverse Proxy · SSL"]
@@ -157,7 +158,7 @@ OPNsense actúa como gateway único entre todas las redes, con Suricata 8.0.4 en
 
 | VM | IP | Rol | Tecnología | Agente Wazuh |
 |----|----|-----|------------|--------------|
-| VM100 | 172.17.0.167 | Atacante simulado | Kali 2025.4 · Tool ZTT v1.1 · Python 3.13 | — |
+| VM100 | 172.17.0.167 | Atacante simulado | Kali 2025.4 · Tool ZTT · Python 3.13 | — |
 | VM101 | 172.18.0.1 | Firewall perimetral | OPNsense · PF · Suricata 8.0.4 · AR | 009 |
 | VM102 | 172.18.0.12 | SIEM central | Wazuh Manager 4.14.1 · OpenSearch | — |
 | VM103 | 172.17.0.13 | Web honeypot + IDS host | Nginx 1.18.0 · Fail2Ban 0.11.1 · Ubuntu 20.04 | 008 |
@@ -171,7 +172,7 @@ OPNsense actúa como gateway único entre todas las redes, con Suricata 8.0.4 en
 
 ---
 
-## Fases de la Tool ZTT v1.1
+## Fases de la Tool ZTT
 
 | Fase | Vector de ataque | IP origen | Herramienta | Alerta Wazuh | Respuesta |
 |------|-----------------|-----------|-------------|--------------|-----------|
@@ -272,7 +273,7 @@ sudo python3 src/ztt_framework.py --status   # 3/3 targets ONLINE
 sudo python3 src/ztt_framework.py --tribunal  # demo completa
 ```
 
-### Dependencias Tool ZTT v1.1 (VM100 Kali)
+### Dependencias Tool ZTT (VM100 Kali)
 
 ```bash
 # Herramientas externas
@@ -292,7 +293,7 @@ gunzip /usr/share/wordlists/rockyou.txt.gz
 ```
 tfg-soc-zerotrust/
 ├── src/
-│   ├── ztt_framework.py        # Tool ZTT v1.1 — 866 líneas, Python 3.13
+│   ├── ztt_framework.py        # Tool ZTT — 866 líneas, Python 3.13
 │   └── preparar.sh             # Limpieza de alias IP pre-demo
 ├── config/
 │   ├── wazuh/
