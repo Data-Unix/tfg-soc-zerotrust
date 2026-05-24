@@ -53,7 +53,7 @@
 
 Este repositorio contiene la implementación completa de un **Security Operations Center (SOC) Zero Trust** construido íntegramente con herramientas open source sobre infraestructura virtualizada de bajo coste. El sistema opera sobre un único servidor físico con **11 máquinas virtuales** distribuidas en cuatro redes segmentadas.
 
-El núcleo del proyecto es la **Tool ZTT v1.1** (*Zero Trust Tribunal*), una herramienta Python de desarrollo propio que recorre 9 fases de ataque progresivo sobre el laboratorio y verifica en tiempo real la respuesta del sistema —detección, bloqueo y alerta— ante cada vector de amenaza.
+El núcleo del proyecto es la **Tool ZTT** (*Zero Trust Tribunal*), una herramienta Python de desarrollo propio que recorre 9 fases de ataque progresivo sobre el laboratorio y verifica en tiempo real la respuesta del sistema —detección, bloqueo y alerta— ante cada vector de amenaza.
 
 El sistema replica los principios del **NIST SP 800-207** (*Zero Trust Architecture*) y da cobertura funcional a los requisitos técnicos de la **Directiva NIS2** y el **ENS categoría BÁSICA**, con un gasto en licencias de software de **0 €**.
 
