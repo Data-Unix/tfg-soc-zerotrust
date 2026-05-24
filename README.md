@@ -51,9 +51,11 @@
 
 ## ¿Qué es este proyecto?
 
-Este repositorio contiene la implementación completa de un **Security Operations Center (SOC) Zero Trust** construido íntegramente con herramientas open source sobre infraestructura virtualizada de bajo coste. El sistema opera sobre un único servidor físico con **11 máquinas virtuales** distribuidas en cuatro redes segmentadas.
+Este repositorio contiene la implementación completa de un **Security Operations Center (SOC) con arquitectura Zero Trust**, construido íntegramente con herramientas open source sobre infraestructura virtualizada. El sistema opera sobre un único servidor físico con **11 máquinas virtuales** distribuidas en cuatro redes segmentadas con niveles de confianza diferenciados.
 
-El núcleo del proyecto es la **Tool ZTT** (*Zero Trust Tribunal*), una herramienta Python de desarrollo propio que recorre 9 fases de ataque progresivo sobre el laboratorio y verifica en tiempo real la respuesta del sistema —detección, bloqueo y alerta— ante cada vector de amenaza.
+El núcleo del proyecto es la **cadena de detección y respuesta activa**: Wazuh como SIEM central recibe telemetría de todos los agentes, evalúa las alertas con reglas personalizadas y dispara automáticamente el Active Response sobre OPNsense —que bloquea la IP atacante vía pfctl en menos de 5 segundos. Esta cadena integra honeypots avanzados (T-Pot), IDS de red (Suricata), protección de capa de aplicación (Fail2Ban + Nginx) e identidad centralizada (Authentik SSO).
+
+La **Tool ZTT** es la herramienta de verificación desarrollada ad hoc para validar la respuesta del sistema: recorre 9 fases de ataque progresivo y confirma en tiempo real que cada componente detecta, bloquea y alerta correctamente ante cada vector de amenaza.
 
 El sistema replica los principios del **NIST SP 800-207** (*Zero Trust Architecture*) y da cobertura funcional a los requisitos técnicos de la **Directiva NIS2** y el **ENS categoría BÁSICA**, con un gasto en licencias de software de **0 €**.
 
