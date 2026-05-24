@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1060" math="0" shadow="1">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ══════════════════════════════════════════════════════════
+         TITLE BANNER
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="10" value="&lt;b style=&quot;font-size:20px;&quot;&gt;SOC Zero Trust — Arquitectura de Red&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px;font-weight:normal;&quot;&gt;TFG ASIR 2025-2026 · IES Valle Inclán · 11 VMs · 4 redes segmentadas · Zero Trust NIST SP 800-207&lt;/span&gt;"
+         style="text;html=1;strokeColor=#1A252F;fillColor=#2C3E50;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontColor=#FFFFFF;fontSize=14;"
+         vertex="1" parent="1">
+      <mxGeometry x="0" y="0" width="2200" height="65" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         WAN ZONE
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="11" value="&lt;b style=&quot;font-size:13px;&quot;&gt;WAN — 203.0.113.0/24 · No confiable&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;&quot;&gt;Internet simulado (RFC 5737) · GW: 203.0.113.1&lt;/span&gt;"
+         style="rounded=1;arcSize=5;fillColor=#FFEBEE;strokeColor=#C0392B;strokeWidth=3;verticalAlign=middle;fontStyle=0;fontSize=13;fontColor=#C0392B;"
+         vertex="1" parent="1">
+      <mxGeometry x="300" y="75" width="1600" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         VM101 OPNSENSE — GATEWAY UNICO
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="20" value="&lt;b style=&quot;font-size:14px;&quot;&gt;VM101 · OPNsense — Gateway único entre todas las redes&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;&quot;&gt;Firewall PF · Suricata 8.0.4 IDS (WAN) · Active Response (opnsense-fw) · &lt;b&gt;Agente Wazuh 009&lt;/b&gt;&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px;color:#90A4AE;&quot;&gt;vtnet0: 203.0.113.10 · vtnet1: 172.17.0.1 · vtnet2: 172.18.0.1 · vtnet3: 172.16.0.1&lt;/span&gt;"
+         style="rounded=1;fillColor=#2C3E50;strokeColor=#1A252F;strokeWidth=3;fontColor=#FFFFFF;fontStyle=0;fontSize=12;verticalAlign=middle;"
+         vertex="1" parent="1">
+      <mxGeometry x="350" y="160" width="1500" height="110" as="geometry" />
+    </mxCell>
+
+    <!-- Logo placeholder OPNsense — sustituir con imagen real -->
+    <mxCell id="20L" value="OPN"
+         style="text;html=1;strokeColor=#D94F00;fillColor=#D94F00;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontColor=#FFFFFF;fontSize=11;fontStyle=1;"
+         vertex="1" parent="1">
+      <mxGeometry x="360" y="185" width="45" height="25" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LAN_DMZ ZONE CONTAINER
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="30" value="&lt;b style=&quot;font-size:13px;&quot;&gt;LAN_DMZ · 172.17.0.0/24&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;&quot;&gt;Confianza BAJA · vtnet1&lt;/span&gt;"
+         style="rounded=1;arcSize=3;fillColor=#FFF8F0;strokeColor=#E67E22;strokeWidth=3;verticalAlign=top;fontStyle=0;fontSize=13;fontColor=#E67E22;spacingTop=8;"
+         vertex="1" parent="1">
+      <mxGeometry x="20" y="292" width="570" height="490" as="geometry" />
+    </mxCell>
+
+    <!-- VM100 Kali — Atacante -->
+    <mxCell id="31" value="&lt;b&gt;VM100 · Kali Linux 2025.4&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;color:#E74C3C;&quot;&gt;Atacante simulado&lt;/span&gt;&lt;br&gt;Tool ZTT v1.1 · Python 3.13&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.17.0.167&lt;/span&gt;"
+         style="rounded=1;fillColor=#FDECEA;strokeColor=#E74C3C;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="40" y="358" width="252" height="90" as="geometry" />
+    </mxCell>
+    <!-- Logo Kali placeholder -->
+    <mxCell id="31L" value="KALI"
+         style="text;html=1;strokeColor=#268BEE;fillColor=#268BEE;align=center;verticalAlign=middle;rounded=1;fontColor=#FFFFFF;fontSize=9;fontStyle=1;"
+         vertex="1" parent="1">
+      <mxGeometry x="45" y="362" width="36" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- VM103 Nginx + Fail2Ban -->
+    <mxCell id="32" value="&lt;b&gt;VM103 · Nginx 1.18.0 + Fail2Ban&lt;/b&gt;&lt;br&gt;Web honeypot · Rate limiting&lt;br&gt;&lt;b style=&quot;color:#E67E22;&quot;&gt;Agente 008&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.17.0.13&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFFFF;strokeColor=#E67E22;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="318" y="358" width="252" height="90" as="geometry" />
+    </mxCell>
+    <!-- Logo Nginx placeholder -->
+    <mxCell id="32L" value="NGX"
+         style="text;html=1;strokeColor=#009639;fillColor=#009639;align=center;verticalAlign=middle;rounded=1;fontColor=#FFFFFF;fontSize=9;fontStyle=1;"
+         vertex="1" parent="1">
+      <mxGeometry x="323" y="362" width="36" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- VM106 T-Pot — HONEYPOT DESTACADO -->
+    <mxCell id="33" value="&lt;b style=&quot;font-size:12px;&quot;&gt;VM106 · T-Pot v24.04.1 STANDARD&lt;/b&gt;&lt;br&gt;Cowrie (SSH) · Dionaea (SMB/MSSQL)&lt;br&gt;&lt;b style=&quot;color:#E67E22;&quot;&gt;Agente 010&lt;/b&gt; · ELK Stack interno&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.17.0.16&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFDE7;strokeColor=#F39C12;strokeWidth=3;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="40" y="478" width="252" height="100" as="geometry" />
+    </mxCell>
+    <!-- Logo T-Pot placeholder -->
+    <mxCell id="33L" value="T-POT"
+         style="text;html=1;strokeColor=#8B0000;fillColor=#8B0000;align=center;verticalAlign=middle;rounded=1;fontColor=#FFFFFF;fontSize=9;fontStyle=1;"
+         vertex="1" parent="1">
+      <mxGeometry x="45" y="482" width="40" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- VM108 NPM -->
+    <mxCell id="34" value="&lt;b&gt;VM108 · NPM 2.14.0&lt;/b&gt;&lt;br&gt;Reverse Proxy · 8 hosts&lt;br&gt;SSL wildcard *.lab.tfg.local&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.17.0.15&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFFFF;strokeColor=#E67E22;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="318" y="478" width="252" height="100" as="geometry" />
+    </mxCell>
+
+    <!-- VM109 Mail -->
+    <mxCell id="35" value="&lt;b&gt;VM109 · Mail Server&lt;/b&gt;&lt;br&gt;docker-mailserver v15.1.0&lt;br&gt;Roundcube · mail.lab.tfg.local&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.17.0.20&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFFFF;strokeColor=#E67E22;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="179" y="608" width="252" height="88" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LAN_INTERNA ZONE CONTAINER
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="40" value="&lt;b style=&quot;font-size:13px;&quot;&gt;LAN_INTERNA · 172.18.0.0/24&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;&quot;&gt;Confianza MEDIA-ALTA · vtnet2&lt;/span&gt;"
+         style="rounded=1;arcSize=3;fillColor=#F1F8F1;strokeColor=#27AE60;strokeWidth=3;verticalAlign=top;fontStyle=0;fontSize=13;fontColor=#27AE60;spacingTop=8;"
+         vertex="1" parent="1">
+      <mxGeometry x="610" y="292" width="885" height="490" as="geometry" />
+    </mxCell>
+
+    <!-- VM102 Wazuh SIEM — ESTRELLA DEL PROYECTO -->
+    <mxCell id="41" value="&lt;b style=&quot;font-size:13px;&quot;&gt;VM102 · Wazuh Manager 4.14.1 + OpenSearch · SIEM Central&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;&quot;&gt;5 Agentes activos: 008 (VM103) · 009 (VM101) · 010 (VM106) · 011 (VM104) · 012 (VM105)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px;color:#5D4037;&quot;&gt;Reglas: 100005 · 100010 · 100011 · 100014 · 100020 · 100040&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.18.0.12&lt;/span&gt;"
+         style="rounded=1;fillColor=#E8F8E8;strokeColor=#27AE60;strokeWidth=4;fontSize=12;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="630" y="358" width="845" height="110" as="geometry" />
+    </mxCell>
+    <!-- Logo Wazuh placeholder -->
+    <mxCell id="41L" value="WAZ"
+         style="text;html=1;strokeColor=#005571;fillColor=#005571;align=center;verticalAlign=middle;rounded=1;fontColor=#FFFFFF;fontSize=9;fontStyle=1;"
+         vertex="1" parent="1">
+      <mxGeometry x="636" y="363" width="36" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- VM104 Win10 -->
+    <mxCell id="42" value="&lt;b&gt;VM104 · Windows 10 LTSC 21H2&lt;/b&gt;&lt;br&gt;Endpoint corporativo&lt;br&gt;&lt;b style=&quot;color:#27AE60;&quot;&gt;Agente 011&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.18.0.56&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFFFF;strokeColor=#27AE60;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="630" y="498" width="400" height="90" as="geometry" />
+    </mxCell>
+
+    <!-- VM107 Authentik -->
+    <mxCell id="44" value="&lt;b&gt;VM107 · Authentik 2026.2.2&lt;/b&gt;&lt;br&gt;Identity Provider · SSO&lt;br&gt;LDAP Outpost · Forward Auth&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.18.0.14&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFFFF;strokeColor=#27AE60;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="1075" y="498" width="400" height="90" as="geometry" />
+    </mxCell>
+
+    <!-- VM105 AD DC01 -->
+    <mxCell id="43" value="&lt;b&gt;VM105 · Windows Server 2022 CORE · DC01&lt;/b&gt;&lt;br&gt;Active Directory · lab.tfg.local · NPAS&lt;br&gt;&lt;b style=&quot;color:#27AE60;&quot;&gt;Agente 012&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.18.0.20&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFFFF;strokeColor=#27AE60;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="630" y="618" width="845" height="88" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LAN_MNG ZONE CONTAINER
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="50" value="&lt;b style=&quot;font-size:13px;&quot;&gt;LAN_MNG · 172.16.0.0/24&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;&quot;&gt;Confianza ALTA · vtnet3&lt;/span&gt;"
+         style="rounded=1;arcSize=3;fillColor=#EBF5FB;strokeColor=#2980B9;strokeWidth=3;verticalAlign=top;fontStyle=0;fontSize=13;fontColor=#2980B9;spacingTop=8;"
+         vertex="1" parent="1">
+      <mxGeometry x="1515" y="292" width="665" height="490" as="geometry" />
+    </mxCell>
+
+    <!-- Proxmox VE -->
+    <mxCell id="51" value="&lt;b&gt;Proxmox VE&lt;/b&gt;&lt;br&gt;Hipervisor físico · 11 VMs&lt;br&gt;4 bridges: vmbr0-3&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.16.0.10&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFFFF;strokeColor=#2980B9;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="1540" y="358" width="310" height="95" as="geometry" />
+    </mxCell>
+    <!-- Logo Proxmox placeholder -->
+    <mxCell id="51L" value="PVE"
+         style="text;html=1;strokeColor=#E57000;fillColor=#E57000;align=center;verticalAlign=middle;rounded=1;fontColor=#FFFFFF;fontSize=9;fontStyle=1;"
+         vertex="1" parent="1">
+      <mxGeometry x="1546" y="362" width="36" height="18" as="geometry" />
+    </mxCell>
+
+    <!-- VM110 Guacamole -->
+    <mxCell id="52" value="&lt;b&gt;VM110 · Apache Guacamole 1.6.0&lt;/b&gt;&lt;br&gt;Acceso remoto RDP + SSH&lt;br&gt;SSO Kerberos · FQDN guacamole.*&lt;br&gt;&lt;span style=&quot;color:#7F8C8D;font-size:10px;&quot;&gt;172.16.0.11&lt;/span&gt;"
+         style="rounded=1;fillColor=#FFFFFF;strokeColor=#2980B9;strokeWidth=2;fontSize=11;verticalAlign=middle;fontStyle=0;"
+         vertex="1" parent="1">
+      <mxGeometry x="1540" y="488" width="310" height="100" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         FLECHAS DE RED (gris — conectividad vtnet)
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="80" value="vtnet0"
+         style="edgeStyle=orthogonalEdgeStyle;strokeColor=#7F8C8D;strokeWidth=2;fontSize=10;fontColor=#7F8C8D;fontStyle=0;"
+         edge="1" source="11" target="20" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="81" value="vtnet1"
+         style="edgeStyle=orthogonalEdgeStyle;strokeColor=#7F8C8D;strokeWidth=2;fontSize=10;fontColor=#7F8C8D;fontStyle=0;"
+         edge="1" source="20" target="30" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="82" value="vtnet2"
+         style="edgeStyle=orthogonalEdgeStyle;strokeColor=#7F8C8D;strokeWidth=2;fontSize=10;fontColor=#7F8C8D;fontStyle=0;"
+         edge="1" source="20" target="40" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="83" value="vtnet3"
+         style="edgeStyle=orthogonalEdgeStyle;strokeColor=#7F8C8D;strokeWidth=2;fontSize=10;fontColor=#7F8C8D;fontStyle=0;"
+         edge="1" source="20" target="50" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         FLECHAS AGENTE WAZUH (azul punteado)
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="91" value="Agente 010"
+         style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#2980B9;strokeWidth=2;fontSize=10;fontColor=#2980B9;"
+         edge="1" source="33" target="41" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="92" value="Agente 008"
+         style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#2980B9;strokeWidth=2;fontSize=10;fontColor=#2980B9;"
+         edge="1" source="32" target="41" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="93" value="Agente 011"
+         style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#2980B9;strokeWidth=2;fontSize=10;fontColor=#2980B9;"
+         edge="1" source="42" target="41" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="94" value="Agente 012"
+         style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#2980B9;strokeWidth=2;fontSize=10;fontColor=#2980B9;"
+         edge="1" source="43" target="41" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="95" value="Agente 009"
+         style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#2980B9;strokeWidth=2;fontSize=10;fontColor=#2980B9;"
+         edge="1" source="20" target="41" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ACTIVE RESPONSE — la flecha más importante
+         VM102 Wazuh → VM101 OPNsense → bloquea VM100
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="96" value="&lt;b&gt;ACTIVE RESPONSE&lt;/b&gt;&lt;br&gt;opnsense-fw → pfctl&lt;br&gt;tabla __wazuh_agent_drop&lt;br&gt;&lt;b&gt;Latencia &amp;lt; 5 segundos&lt;/b&gt;"
+         style="edgeStyle=orthogonalEdgeStyle;strokeColor=#C0392B;strokeWidth=5;fillColor=#C0392B;fontColor=#C0392B;fontSize=10;fontStyle=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;"
+         edge="1" source="41" target="20" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ATAQUE ZTT (rojo punteado — VM100 → VM106)
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="98" value="&lt;b&gt;Ataque ZTT&lt;/b&gt;&lt;br&gt;Hydra · ffuf · impacket"
+         style="edgeStyle=orthogonalEdgeStyle;dashed=1;dashPattern=8 4;strokeColor=#E74C3C;strokeWidth=3;fillColor=#E74C3C;fontColor=#E74C3C;fontSize=10;fontStyle=1;"
+         edge="1" source="31" target="33" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- IP bloqueada: OPNsense → VM100 -->
+    <mxCell id="97" value="&lt;b&gt;IP BLOQUEADA&lt;/b&gt;"
+         style="edgeStyle=orthogonalEdgeStyle;strokeColor=#C0392B;strokeWidth=3;fillColor=#C0392B;fontColor=#C0392B;fontSize=10;fontStyle=1;endArrow=block;endFill=1;"
+         edge="1" source="20" target="31" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LEYENDA
+    ══════════════════════════════════════════════════════════ -->
+    <mxCell id="60" value=""
+         style="rounded=1;fillColor=#F8F9FA;strokeColor=#2C3E50;strokeWidth=2;"
+         vertex="1" parent="1">
+      <mxGeometry x="20" y="802" width="2160" height="210" as="geometry" />
+    </mxCell>
+
+    <mxCell id="60T" value="&lt;b style=&quot;font-size:13px;&quot;&gt;LEYENDA&lt;/b&gt;"
+         style="text;html=1;fontSize=13;fontStyle=1;align=left;"
+         vertex="1" parent="1">
+      <mxGeometry x="30" y="808" width="120" height="25" as="geometry" />
+    </mxCell>
+
+    <!-- Leyenda: flechas -->
+    <mxCell id="L1" value="" style="edgeStyle=none;strokeColor=#7F8C8D;strokeWidth=2;" edge="1" parent="1">
+      <mxGeometry as="geometry"><mxPoint x="35" y="850" as="sourcePoint"/><mxPoint x="115" y="850" as="targetPoint"/></mxGeometry>
+    </mxCell>
+    <mxCell id="L1T" value="Conectividad de red (vtnet)" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="125" y="840" width="230" height="22" as="geometry" />
+    </mxCell>
+
+    <mxCell id="L2" value="" style="edgeStyle=none;dashed=1;strokeColor=#2980B9;strokeWidth=2;" edge="1" parent="1">
+      <mxGeometry as="geometry"><mxPoint x="35" y="882" as="sourcePoint"/><mxPoint x="115" y="882" as="targetPoint"/></mxGeometry>
+    </mxCell>
+    <mxCell id="L2T" value="Agente Wazuh → SIEM (telemetría)" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="125" y="872" width="270" height="22" as="geometry" />
+    </mxCell>
+
+    <mxCell id="L3" value="" style="edgeStyle=none;strokeColor=#C0392B;strokeWidth=5;" edge="1" parent="1">
+      <mxGeometry as="geometry"><mxPoint x="35" y="914" as="sourcePoint"/><mxPoint x="115" y="914" as="targetPoint"/></mxGeometry>
+    </mxCell>
+    <mxCell id="L3T" value="Active Response automático (Wazuh → OPNsense → pfctl block · &lt; 5s)" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="125" y="904" width="380" height="22" as="geometry" />
+    </mxCell>
+
+    <mxCell id="L4" value="" style="edgeStyle=none;dashed=1;dashPattern=8 4;strokeColor=#E74C3C;strokeWidth=3;" edge="1" parent="1">
+      <mxGeometry as="geometry"><mxPoint x="35" y="946" as="sourcePoint"/><mxPoint x="115" y="946" as="targetPoint"/></mxGeometry>
+    </mxCell>
+    <mxCell id="L4T" value="Vector de ataque Tool ZTT v1.1 (Hydra · ffuf · impacket)" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="125" y="936" width="340" height="22" as="geometry" />
+    </mxCell>
+
+    <!-- Leyenda: colores de zona -->
+    <mxCell id="LC1" value="" style="fillColor=#FFEBEE;strokeColor=#C0392B;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="560" y="838" width="22" height="22" as="geometry" />
+    </mxCell>
+    <mxCell id="LC1T" value="WAN — No confiable" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="590" y="836" width="200" height="22" as="geometry" />
+    </mxCell>
+
+    <mxCell id="LC2" value="" style="fillColor=#FFF8F0;strokeColor=#E67E22;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="560" y="870" width="22" height="22" as="geometry" />
+    </mxCell>
+    <mxCell id="LC2T" value="LAN_DMZ — Confianza baja" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="590" y="868" width="220" height="22" as="geometry" />
+    </mxCell>
+
+    <mxCell id="LC3" value="" style="fillColor=#F1F8F1;strokeColor=#27AE60;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="560" y="902" width="22" height="22" as="geometry" />
+    </mxCell>
+    <mxCell id="LC3T" value="LAN_INTERNA — Confianza media-alta" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="590" y="900" width="270" height="22" as="geometry" />
+    </mxCell>
+
+    <mxCell id="LC4" value="" style="fillColor=#EBF5FB;strokeColor=#2980B9;strokeWidth=2;" vertex="1" parent="1">
+      <mxGeometry x="560" y="934" width="22" height="22" as="geometry" />
+    </mxCell>
+    <mxCell id="LC4T" value="LAN_MNG — Confianza alta" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="590" y="932" width="220" height="22" as="geometry" />
+    </mxCell>
+
+    <mxCell id="LC5" value="" style="fillColor=#FFFDE7;strokeColor=#F39C12;strokeWidth=3;" vertex="1" parent="1">
+      <mxGeometry x="560" y="966" width="22" height="22" as="geometry" />
+    </mxCell>
+    <mxCell id="LC5T" value="Honeypot principal (T-Pot · objetivo ZTT)" style="text;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="590" y="964" width="280" height="22" as="geometry" />
+    </mxCell>
+
+    <!-- Nota de logos -->
+    <mxCell id="LNOTE" value="&lt;b&gt;Logos de servicios:&lt;/b&gt; sustituir los badges de color (OPN · KALI · NGX · WAZ · T-POT · PVE) por las imágenes oficiales: Extras → Edit Style → shape=image;image=[URL logo] o arrastrar PNG desde el escritorio al lienzo."
+         style="text;html=1;fontSize=10;fontColor=#7F8C8D;align=left;verticalAlign=top;"
+         vertex="1" parent="1">
+      <mxGeometry x="950" y="835" width="1200" height="160" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
