@@ -1,0 +1,7 @@
+# Este directorio contiene:
+# - architecture.png   — diagrama de arquitectura de red (4 zonas, 11 VMs)
+# - demo-ztt-espectaculo.gif — grabación asciinema de la Tool ZTT en modo --espectaculo
+#
+# Los ficheros multimedia no se incluyen en el control de versiones por tamaño.
+# Generarlos con:
+#   asciinema rec demo.cast && agg demo.cast media/demo-ztt-espectaculo.gif

@@ -1,0 +1,393 @@
+
+<!--
+================================================================================
+  FICHERO: local_rules.xml
+  ENTORNO: Wazuh Manager v4.14.1 | OPNsense v26.1.6_2 | Suricata v8.0.2
+           T-Pot (Cowrie/Dionaea) | Fail2Ban | Tenants + Zero Trust
+================================================================================
+
+  JUSTIFICACIÓN DE LA UNIFICACIÓN DE REGLAS
+  ==========================================
+    - 900001-900099  → Eventos base (semillas para correlacion temporal)
+    - 100001-100009  → Deteccion de ataques de aplicacion (SSH, Web)
+    - 100010-100019  → Honeypot T-Pot / Cowrie
+    - 100020-100029  → Honeypot T-Pot / Dionaea
+    - 100030-100039  → Fail2Ban en VM servicios cliente
+    - 100040-100049  → Consolidacion y respuesta activa
+    - 100100-100299  → Suricata EVE JSON perimetral
+
+  ARQUITECTURA DE INGESTA DE SURICATA
+  =====================================
+  OPNsense dispone del plugin os-wazuh-agent v4.14.3, que lee directamente
+  /var/log/suricata/eve.json en formato JSON puro y lo transmite al manager
+  mediante canal cifrado TCP/1514. El decoder built-in "json" de Wazuh
+  extrae automaticamente todos los campos anidados.
+
+  Las reglas 100100-100122 heredan de la regla built-in 86601
+  (grupos: ids, suricata).
+
+  MODELO ZERO TRUST Y CONVERGENCIA DEL BLOQUEO
+  ==============================================
+  Todo el trafico entrante se considera potencialmente hostil. La respuesta
+  activa converge en el alias "wazuh_blocklist" de OPNsense.
+
+  SEGMENTACION POR ZONAS DE RED
+  ===============================
+    vtnet0  → WAN  (203.0.113.10)  : Suricata IDS
+    vtnet1  → LAN1 (172.17.0.1)    : Clientes, T-Pot, Kali
+    vtnet2  → LAN2 (172.18.0.1)    : Wazuh Manager (172.18.0.12)
+
+  Las reglas 100120-100122 escalan severidad cuando el trafico ingresa
+  por vtnet0 (WAN).
+
+  MULTI-TENANT
+  ============
+    - Global (admin_soc)      : visibilidad completa
+    - cliente_demo (cliente_viewer) : solo agentes del grupo cliente_demo
+
+  GRUPOS DE AGENTES
+  =================
+    - honeypot     : T-Pot (Cowrie + Dionaea)
+    - cliente_demo : VM servicios cliente
+    - (default)    : OPNsense (Suricata)
+
+  MITRE ATT&CK
+  ============
+    T1190  → Exploit Public-Facing Application
+    T1071  → Application Layer Protocol
+    T1105  → Ingress Tool Transfer
+    T1203  → Exploitation for Client Execution
+    T1046  → Network Service Scanning
+    T1498  → Network Denial of Service
+    T1566  → Phishing
+================================================================================
+-->
+
+<group name="local,syslog,attacks">
+
+  <rule id="900001" level="3">
+    <if_sid>5710</if_sid>
+    <description>Evento SSH sospechoso (base para correlacion).</description>
+    <group>ssh,base_event</group>
+  </rule>
+
+  <rule id="900002" level="3">
+    <if_sid>5710</if_sid>
+    <match>authentication failure|Failed password</match>
+    <description>Fallo de autenticacion SSH (evento base).</description>
+    <group>ssh,authentication_failed,base_event</group>
+  </rule>
+
+  <rule id="900003" level="3">
+    <if_sid>31100</if_sid>
+    <description>Evento HTTP registrado (base).</description>
+    <group>web,base_event</group>
+  </rule>
+
+  <rule id="900004" level="3">
+    <if_sid>5711</if_sid>
+    <description>Evento SSH anomalo - base para deteccion de escaneo.</description>
+    <group>ssh,scan,base_event</group>
+  </rule>
+
+  <rule id="900010" level="6">
+    <if_sid>31100</if_sid>
+    <match>union select|select from|insert into|drop table</match>
+    <description>Patron basico de SQL Injection detectado.</description>
+    <group>web,sql_injection,base_event</group>
+  </rule>
+
+  <rule id="900011" level="6">
+    <if_sid>31100</if_sid>
+    <match>&lt;script|javascript:|onerror=|alert(</match>
+    <description>Patron basico de XSS detectado.</description>
+    <group>web,xss,base_event</group>
+  </rule>
+
+  <rule id="900012" level="6">
+    <if_sid>31100</if_sid>
+    <match>/etc/passwd|/etc/shadow|\.git|\.env|wp-config.php|config.php</match>
+    <description>Intento de acceso a archivo sensible.</description>
+    <group>web,access_control,base_event</group>
+  </rule>
+
+  <rule id="100001" level="10" frequency="15" timeframe="120">
+    <if_matched_sid>900001</if_matched_sid>
+    <same_source_ip/>
+    <description>Escaneo de puertos SSH detectado desde $(srcip).</description>
+    <group>scan,recon,pci_dss_11.4</group>
+  </rule>
+
+  <rule id="100002" level="10" frequency="10" timeframe="60">
+    <if_matched_sid>900004</if_matched_sid>
+    <same_source_ip/>
+    <description>Nmap Scan o conexion anomala detectada desde $(srcip).</description>
+    <group>scan,recon,pci_dss_11.4</group>
+  </rule>
+
+  <rule id="100003" level="10" frequency="8" timeframe="120">
+    <if_matched_sid>900002</if_matched_sid>
+    <same_source_ip/>
+    <description>Ataque de fuerza bruta SSH desde $(srcip).</description>
+    <group>authentication_failed,brute_force,pci_dss_11.4</group>
+  </rule>
+
+  <rule id="100005" level="8" frequency="5" timeframe="10">
+    <if_matched_sid>900003</if_matched_sid>
+    <same_source_ip/>
+    <description>Enumeracion de recursos web detectada.</description>
+    <group>web,scan,recon</group>
+  </rule>
+
+  <rule id="100014" level="10">
+    <if_sid>31101</if_sid> 
+    <match>Fuzz Faster U Fool</match>
+    <description>Escaneo web detectado: herramienta de fuzzing identificada en logs Nginx.</description>
+    <group>web,attack,scan</group>
+  </rule>
+
+  <rule id="100006" level="12">
+    <if_matched_sid>900010</if_matched_sid>
+    <description>Intento de SQL Injection confirmado.</description>
+    <group>web,attack,sql_injection,pci_dss_11.4</group>
+  </rule>
+
+  <rule id="100007" level="10">
+    <if_matched_sid>900012</if_matched_sid>
+    <description>Acceso no autorizado a archivos criticos.</description>
+    <group>web,attack,access_control</group>
+  </rule>
+
+  <rule id="100008" level="7">
+    <if_sid>5711</if_sid>
+    <match>Preauth|Bad protocol version</match>
+    <description>Conexion SSH cerrada abruptamente (posible escaneo Nmap).</description>
+    <group>recon,scan</group>
+  </rule>
+
+  <rule id="100009" level="12" frequency="100" timeframe="60">
+    <if_matched_group>ssh|web</if_matched_group>
+    <same_source_ip />
+    <description>Ataque DoS detectado desde la IP $(srcip).</description>
+    <group>dos,attack,pci_dss_11.4</group>
+  </rule>
+
+</group>
+
+<group name="tpot,honeypot">
+
+  <rule id="100010" level="10">
+    <decoded_as>json</decoded_as>
+    <field name="eventid">^cowrie\.login\.failed$</field>
+    <description>T-Pot Cowrie: intento SSH fallido desde $(src_ip)</description>
+    <group>tpot,cowrie,authentication_fail</group>
+  </rule>
+
+  <rule id="100011" level="14">
+    <decoded_as>json</decoded_as>
+    <field name="eventid">^cowrie\.login\.success$</field>
+    <description>T-Pot Cowrie: LOGIN EXITOSO honeypot CRITICO desde $(src_ip)</description>
+    <group>tpot,cowrie,authentication_success,high_priority</group>
+  </rule>
+
+  <rule id="100012" level="12">
+    <decoded_as>json</decoded_as>
+    <field name="eventid">^cowrie\.command\.input$</field>
+    <description>T-Pot Cowrie: comando ejecutado en honeypot: $(input)</description>
+    <group>tpot,cowrie,command_execution</group>
+  </rule>
+
+  <rule id="100013" level="8">
+    <decoded_as>json</decoded_as>
+    <field name="eventid">^cowrie\.session\.connect$</field>
+    <description>T-Pot Cowrie: nueva conexion desde $(src_ip)</description>
+    <group>tpot,cowrie,connection</group>
+  </rule>
+
+  <rule id="100020" level="10">
+    <decoded_as>json</decoded_as>
+    <field name="connection.protocol">smbd|mssqld|mysqld</field>
+    <description>T-Pot Dionaea: conexion exploit desde $(src_ip)</description>
+    <group>tpot,dionaea,exploit</group>
+  </rule>
+
+</group>
+
+<group name="fail2ban">
+
+  <!-- Regla padre: captura eventos fail2ban.actions -->
+  <rule id="100028" level="0" noalert="1">
+    <decoded_as>sudo</decoded_as>
+    <match>fail2ban.actions</match>
+    <description>Fail2Ban: Evento generico (padre)</description>
+    <group>syslog,sudo,fail2ban</group>
+  </rule>
+
+  <rule id="100030" level="10">
+    <if_sid>100028</if_sid>
+    <match>Ban </match>
+    <description>Fail2Ban: IP baneada en servicios cliente</description>
+    <group>fail2ban,block,brute_force</group>
+  </rule>
+
+  <rule id="100031" level="6">
+    <if_sid>100028</if_sid>
+    <match>Unban </match>
+    <description>Fail2Ban: IP desbaneada en servicios cliente</description>
+    <group>fail2ban,unblock</group>
+  </rule>
+
+</group>
+
+
+<group name="suricata,ids,perimeter">
+
+  <rule id="100100" level="14">
+    <if_sid>86601</if_sid>
+    <field name="alert.severity">^1$</field>
+    <description>Suricata CRITICAL [Sev:1]: $(alert.signature) | Category: $(alert.category) | $(src_ip):$(src_port) => $(dest_ip):$(dest_port)</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+    <group>suricata,suricata_critical,ids,perimeter,network_attack</group>
+  </rule>
+
+  <rule id="100101" level="10">
+    <if_sid>86601</if_sid>
+    <field name="alert.severity">^2$</field>
+    <description>Suricata HIGH [Sev:2]: $(alert.signature) | Category: $(alert.category) | $(src_ip):$(src_port) => $(dest_ip):$(dest_port)</description>
+    <mitre>
+      <id>T1071</id>
+    </mitre>
+    <group>suricata,suricata_high,ids,perimeter,network_attack</group>
+  </rule>
+
+  <rule id="100102" level="6">
+    <if_sid>86601</if_sid>
+    <field name="alert.severity">^3$</field>
+    <description>Suricata MEDIUM [Sev:3]: $(alert.signature) | Category: $(alert.category) | $(src_ip):$(src_port) => $(dest_ip):$(dest_port)</description>
+    <group>suricata,suricata_medium,ids,perimeter,network_attack</group>
+  </rule>
+
+  <rule id="100103" level="3">
+    <if_sid>86601</if_sid>
+    <field name="alert.severity">^4$</field>
+    <description>Suricata LOW [Sev:4]: $(alert.signature) | Category: $(alert.category) | $(src_ip):$(src_port) => $(dest_ip):$(dest_port)</description>
+    <group>suricata,suricata_low,ids,perimeter,network</group>
+  </rule>
+
+  <rule id="100104" level="4">
+    <if_sid>86601</if_sid>
+    <field name="alert.severity" type="pcre2">^(?![1234]$).*$</field>
+    <description>Suricata UNKNOWN severity: $(alert.signature) | Raw severity value: $(alert.severity)</description>
+    <group>suricata,suricata_unknown,ids</group>
+  </rule>
+
+  <rule id="100110" level="14">
+    <if_sid>86601</if_sid>
+    <field name="alert.category" type="pcre2">(?i)malware|trojan|c2|command\s*and\s*control|botnet|coinminer</field>
+    <description>Suricata MALWARE/C2: $(alert.signature) | $(src_ip):$(src_port) => $(dest_ip):$(dest_port)</description>
+    <mitre>
+      <id>T1071</id>
+      <id>T1105</id>
+    </mitre>
+    <group>suricata,suricata_critical,malware,c2,command_and_control,ids</group>
+  </rule>
+
+  <rule id="100111" level="14">
+    <if_sid>86601</if_sid>
+    <field name="alert.category" type="pcre2">(?i)exploit|shellcode|buffer\s*overflow|code\s*execution</field>
+    <description>Suricata EXPLOIT: $(alert.signature) | Target: $(dest_ip):$(dest_port)</description>
+    <mitre>
+      <id>T1190</id>
+      <id>T1203</id>
+    </mitre>
+    <group>suricata,suricata_critical,exploit,ids</group>
+  </rule>
+
+  <rule id="100112" level="8">
+    <if_sid>86601</if_sid>
+    <field name="alert.category" type="pcre2">(?i)scan|reconnaissance|fingerprint|probe</field>
+    <description>Suricata RECON: $(alert.signature) | Scanner: $(src_ip) => $(dest_ip):$(dest_port)</description>
+    <mitre>
+      <id>T1046</id>
+    </mitre>
+    <group>suricata,suricata_medium,recon,scanning,ids</group>
+  </rule>
+
+  <rule id="100113" level="10">
+    <if_sid>86601</if_sid>
+    <field name="alert.category" type="pcre2">(?i)denial\s*of\s*service|dos|flood</field>
+    <description>Suricata DoS: $(alert.signature) | Target: $(dest_ip):$(dest_port)</description>
+    <mitre>
+      <id>T1498</id>
+    </mitre>
+    <group>suricata,suricata_high,dos,ids</group>
+  </rule>
+
+  <rule id="100114" level="10">
+    <if_sid>86601</if_sid>
+    <field name="alert.category" type="pcre2">(?i)web\s*attack|xss|sqli|injection|cross\s*site</field>
+    <description>Suricata WEB ATTACK: $(alert.signature) | Target: $(dest_ip):$(dest_port)</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+    <group>suricata,suricata_high,web_attack,ids</group>
+  </rule>
+
+  <rule id="100115" level="10">
+    <if_sid>86601</if_sid>
+    <field name="alert.category" type="pcre2">(?i)phish</field>
+    <description>Suricata PHISHING: $(alert.signature) | $(src_ip) => $(dest_ip):$(dest_port)</description>
+    <mitre>
+      <id>T1566</id>
+    </mitre>
+    <group>suricata,suricata_high,phishing,ids</group>
+  </rule>
+
+  <rule id="100116" level="4">
+    <if_sid>86601</if_sid>
+    <field name="alert.category" type="pcre2">(?i)policy|information\s*leak|adware|pup</field>
+    <description>Suricata POLICY: $(alert.signature) | $(src_ip) => $(dest_ip):$(dest_port)</description>
+    <group>suricata,suricata_low,policy_violation,ids</group>
+  </rule>
+
+  <rule id="100120" level="15">
+    <if_sid>100100</if_sid>
+    <field name="in_iface">^vtnet0$</field>
+    <description>PERIMETER BREACH CRITICAL: $(alert.signature) desde WAN | $(src_ip):$(src_port) => $(dest_ip):$(dest_port) | RESPUESTA INMEDIATA REQUERIDA</description>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+    <group>suricata,suricata_critical,perimeter_breach,wan_inbound,active_response</group>
+  </rule>
+
+  <rule id="100121" level="12">
+    <if_sid>100101</if_sid>
+    <field name="in_iface">^vtnet0$</field>
+    <description>PERIMETER ALERT HIGH: $(alert.signature) desde WAN | $(src_ip):$(src_port) => $(dest_ip):$(dest_port)</description>
+    <group>suricata,suricata_high,perimeter_breach,wan_inbound</group>
+  </rule>
+
+  <rule id="100122" level="15">
+    <if_sid>100110</if_sid>
+    <field name="in_iface">^vtnet0$</field>
+    <description>PERIMETER MALWARE/C2: $(alert.signature) desde WAN | $(src_ip):$(src_port) => $(dest_ip):$(dest_port) | C2 BEACON INBOUND</description>
+    <mitre>
+      <id>T1071</id>
+      <id>T1105</id>
+    </mitre>
+    <group>suricata,suricata_critical,perimeter_breach,wan_inbound,malware,c2,active_response</group>
+  </rule>
+
+</group>
+
+<group name="active_response,firewall">
+
+  <rule id="100040" level="15">
+    <if_sid>100100,100101,100110,100111,100003,100030,100001,100002,100010</if_sid>
+    <description>AMENAZA CRITICA consolidada - Active Response triggered.</description>
+    <group>active_response,firewall,threat_consolidated</group>
+  </rule>
+
+</group>

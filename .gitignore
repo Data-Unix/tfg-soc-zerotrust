@@ -1,0 +1,52 @@
+# Credenciales y secretos — NUNCA subir
+*.pem
+*.key
+*.p12
+*.pfx
+.env
+.env.*
+secrets.yml
+credentials.json
+wazuh-agent-key.txt
+*registration_password*
+
+# Capturas y evidencias (ficheros grandes, privados)
+Capturas/
+media/screenshots/
+*.pcap
+*.pcapng
+
+# Documentación interna del TFG (no va en el repo público)
+Documento-TFG/
+memory/
+Chats/
+Sesiones-Datos/
+Arquitectura-Resumenes/
+copy_vms.py
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+venv/
+.venv/
+
+# Node / build
+node_modules/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs del lab (nunca al repo)
+*.log

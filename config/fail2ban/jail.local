@@ -1,0 +1,25 @@
+
+[DEFAULT]
+ignoreip = 127.0.0.1/8 172.16.0.0/24
+bantime  = 3600
+findtime = 120
+maxretry = 3
+
+[sshd]
+enabled  = true
+port     = ssh
+logpath  = /var/log/auth.log
+maxretry = 3
+findtime = 120
+bantime  = 3600
+action   = wazuh-syslog
+
+[nginx-req-limit]
+enabled  = true
+filter   = nginx-req-limit
+port     = http,https
+logpath  = /var/log/nginx/error.log
+findtime = 120
+maxretry = 10
+bantime  = 3600
+action   = wazuh-syslog

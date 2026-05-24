@@ -1,0 +1,60 @@
+name: Security Scan
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  scan:
+    name: Credential & Secret Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan for hardcoded credentials
+        run: |
+          echo "=== Scanning for sensitive patterns ==="
+          FAIL=0
+
+          # Passwords
+          if grep -rn --include="*.py" --include="*.sh" --include="*.yml" --include="*.yaml" --include="*.json" \
+            -E "(password|passwd|P@ssw0rd|secret|token)\s*=\s*['\"][^'\"]{4,}" . 2>/dev/null | grep -v "example\|placeholder\|changeme\|CHANGEME"; then
+            echo "ERROR: Possible hardcoded credentials found"
+            FAIL=1
+          fi
+
+          # SSH private keys
+          if grep -rn "BEGIN.*PRIVATE KEY\|BEGIN RSA\|BEGIN EC\|BEGIN DSA\|BEGIN OPENSSH" . 2>/dev/null; then
+            echo "ERROR: Private key material found"
+            FAIL=1
+          fi
+
+          # IP + credential combos
+          if grep -rn --include="*.py" --include="*.sh" \
+            -E "172\.(17|18|16)\.[0-9]+\.[0-9]+.*password|kali.*1234|administrador.*P@" . 2>/dev/null; then
+            echo "ERROR: IP + credential combination found"
+            FAIL=1
+          fi
+
+          if [ $FAIL -eq 1 ]; then
+            echo "SCAN FAILED — Remove credentials before pushing"
+            exit 1
+          fi
+
+          echo "SCAN CLEAN — No credentials detected"
+
+      - name: Check for large binary files
+        run: |
+          MAX_SIZE=$((10 * 1024 * 1024))  # 10 MB
+          while IFS= read -r -d '' file; do
+            SIZE=$(stat -c%s "$file" 2>/dev/null || echo 0)
+            if [ "$SIZE" -gt "$MAX_SIZE" ]; then
+              echo "WARNING: Large file detected: $file (${SIZE} bytes)"
+            fi
+          done < <(find . -not -path './.git/*' -type f -print0)

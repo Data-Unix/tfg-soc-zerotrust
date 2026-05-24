@@ -1,0 +1,13 @@
+
+<!-- Decoders cowrie/dionaea eliminados: el decoder JSON nativo extrae todos los campos como dynamic fields.
+     Documentacion: https://documentation.wazuh.com/current/user-manual/ruleset/decoders/json-decoder.html -->
+<decoder name="cowrie">
+  <plugin_decoder>JSON_Decoder</plugin_decoder>
+  <prematch>"eventid":\s*"cowrie\.</prematch>
+</decoder>
+
+<decoder name="dionaea">
+  <plugin_decoder>JSON_Decoder</plugin_decoder>
+  <prematch>{"connection": </prematch>
+</decoder>
+
