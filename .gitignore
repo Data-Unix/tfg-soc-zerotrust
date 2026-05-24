@@ -1,52 +1,176 @@
-# Credenciales y secretos — NUNCA subir
+# ══════════════════════════════════════════════════════════════════
+# .gitignore — SOC Zero Trust TFG ASIR 2025-2026
+# Regla de oro: si contiene credenciales, claves o datos privados → fuera
+# ══════════════════════════════════════════════════════════════════
+
+# ──────────────────────────────────────────────────────────────────
+# CREDENCIALES Y CLAVES — NUNCA subir bajo ningún concepto
+# ──────────────────────────────────────────────────────────────────
 *.pem
 *.key
 *.p12
 *.pfx
+*.crt
+*.cer
 .env
 .env.*
+.env.local
+.env.production
 secrets.yml
+secrets.yaml
 credentials.json
-wazuh-agent-key.txt
-*registration_password*
+credentials.yml
 
-# Capturas y evidencias (ficheros grandes, privados)
+# Wazuh específico
+wazuh-agent-key.txt
+client.keys
+*registration_password*
+*authd*password*
+*.ossec-tmp
+
+# Contraseñas en config — patrones comunes
+*password*
+*passwd*
+*secret*
+*token*
+# Excepción: archivos de config del proyecto (tienen placeholders, no valores reales)
+!config/wazuh/ossec.conf
+!config/fail2ban/jail.local
+!config/fail2ban/*.conf
+!config/nginx/*.conf
+!config/opnsense/*.sh
+!config/active-response/*
+
+# ──────────────────────────────────────────────────────────────────
+# CAPTURAS Y EVIDENCIAS — privadas o demasiado grandes
+# ──────────────────────────────────────────────────────────────────
 Capturas/
 media/screenshots/
+media/*.pcap
+media/*.pcapng
 *.pcap
 *.pcapng
+*.cap
 
-# Documentación interna del TFG (no va en el repo público)
+# ──────────────────────────────────────────────────────────────────
+# DOCUMENTACIÓN INTERNA DEL TFG — no va al repo público
+# ──────────────────────────────────────────────────────────────────
 Documento-TFG/
 memory/
 Chats/
 Sesiones-Datos/
 Arquitectura-Resumenes/
 copy_vms.py
+*.drawio.bak
 
-# Python
+# ──────────────────────────────────────────────────────────────────
+# PYTHON
+# ──────────────────────────────────────────────────────────────────
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 *.pyo
 .Python
+pip-log.txt
+pip-delete-this-directory.txt
 venv/
 .venv/
+env/
+.env/
+*.egg-info/
+dist/
+build/
+*.egg
 
-# Node / build
+# ──────────────────────────────────────────────────────────────────
+# NODE / JAVASCRIPT (web señuelo si algún día se expande)
+# ──────────────────────────────────────────────────────────────────
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
 dist/
 build/
 
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*~
-
-# Logs del lab (nunca al repo)
+# ──────────────────────────────────────────────────────────────────
+# LOGS — nunca al repositorio
+# ──────────────────────────────────────────────────────────────────
 *.log
+*.log.*
+logs/
+/var/log/
+ossec.log
+alerts.log
+archive.log
+
+# ──────────────────────────────────────────────────────────────────
+# ARCHIVOS TEMPORALES Y BACKUPS
+# ──────────────────────────────────────────────────────────────────
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.swp
+*.swo
+*~
+\#*\#
+
+# ──────────────────────────────────────────────────────────────────
+# SISTEMA OPERATIVO
+# ──────────────────────────────────────────────────────────────────
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+
+# ──────────────────────────────────────────────────────────────────
+# EDITORES E IDEs
+# ──────────────────────────────────────────────────────────────────
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim/Emacs
+*.swp
+*.swo
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+Session.vim
+.netrwhist
+
+# ──────────────────────────────────────────────────────────────────
+# DOCKER (si se usan contenedores localmente)
+# ──────────────────────────────────────────────────────────────────
+.docker/
+docker-compose.override.yml
+
+# ──────────────────────────────────────────────────────────────────
+# ARCHIVOS GRANDES DE MEDIA (subir manualmente cuando estén listos)
+# ──────────────────────────────────────────────────────────────────
+# El GIF y PNG se añaden explícitamente cuando existan
+# media/*.gif  ← NO ignorar, queremos el demo GIF
+# media/*.png  ← NO ignorar, queremos el diagrama PNG
+# El .drawio SÍ se incluye (ya está en el repo)

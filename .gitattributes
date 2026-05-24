@@ -1,12 +1,56 @@
-# Normalizar fin de línea
+# ══════════════════════════════════════════════════════════════════
+# .gitattributes — SOC Zero Trust TFG ASIR 2025-2026
+# Normalización de líneas y clasificación de lenguajes para GitHub
+# ══════════════════════════════════════════════════════════════════
+
+# Normalizar fin de línea automáticamente
 * text=auto
 
-# La web señuelo (5 MB de base64) no cuenta para estadísticas de lenguaje
-web/el-heraldo-pyongyang/index.html linguist-vendored=true
+# ──────────────────────────────────────────────────────────────────
+# CLASIFICACIONES EXPLÍCITAS DE LENGUAJE
+# ──────────────────────────────────────────────────────────────────
 
-# Clasificaciones explícitas
-src/ztt_framework.py linguist-language=Python
-src/preparar.sh linguist-language=Shell
-config/wazuh/local_rules.xml linguist-language=XML
-config/wazuh/tpot_decoders.xml linguist-language=XML
-config/opnsense/rollback-demo.sh linguist-language=Shell
+# Python — Tool ZTT v1.1
+src/ztt_framework.py        linguist-language=Python
+
+# Shell — scripts de laboratorio y Active Response
+src/preparar.sh                        linguist-language=Shell
+config/opnsense/rollback-demo.sh       linguist-language=Shell
+config/active-response/opnsense-fw    linguist-language=Shell
+
+# XML — reglas y decoders Wazuh
+config/wazuh/local_rules.xml          linguist-language=XML
+config/wazuh/tpot_decoders.xml        linguist-language=XML
+config/wazuh/ossec.conf               linguist-language=XML
+
+# YAML — CI/CD
+.github/workflows/security-scan.yml  linguist-language=YAML
+
+# ──────────────────────────────────────────────────────────────────
+# ARCHIVOS VENDORED / GENERADOS
+# No se cuentan en las estadísticas de lenguaje de GitHub
+# ──────────────────────────────────────────────────────────────────
+
+# La web señuelo tiene imágenes en base64 (5 MB) — es contenido generado
+web/el-heraldo-pyongyang/index.html         linguist-vendored=true
+web/el-heraldo-pyongyang/capilar/index.html linguist-vendored=true
+web/el-heraldo-pyongyang/politica/index.html linguist-vendored=true
+web/el-heraldo-pyongyang/cultura/index.html linguist-vendored=true
+web/el-heraldo-pyongyang/cosechas/index.html linguist-vendored=true
+web/el-heraldo-pyongyang/opinion/index.html linguist-vendored=true
+
+# Documentación — no cuenta como código
+docs/*.md                             linguist-documentation=true
+README.md                             linguist-documentation=true
+
+# ──────────────────────────────────────────────────────────────────
+# FIN DE LÍNEA POR TIPO DE ARCHIVO
+# ──────────────────────────────────────────────────────────────────
+*.sh    eol=lf
+*.py    eol=lf
+*.xml   eol=lf
+*.yml   eol=lf
+*.yaml  eol=lf
+*.conf  eol=lf
+*.md    eol=lf
+*.html  eol=lf
