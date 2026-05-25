@@ -80,7 +80,10 @@ class Config:
 # ==============================================================================
 # CONSOLA RICH GLOBAL
 # ==============================================================================
-console = Console(width=160)
+# Auto-detecta el ancho real del terminal para evitar ruptura visual en
+# terminales mas estrechos que 160 cols (MobaXterm, Proxmox VNC, etc.)
+_term_w = shutil.get_terminal_size((130, 40)).columns
+console = Console(width=max(min(_term_w, 160), 100))
 
 # ==============================================================================
 # BANNER Y UI 
@@ -310,7 +313,8 @@ class Executor:
         try:
             if shell:
                 result = subprocess.run(" ".join(cmd), capture_output=True, text=True,
-                                       timeout=timeout, shell=True)
+                                       timeout=timeout, shell=True,
+                                       start_new_session=True, stdin=subprocess.DEVNULL)
             else:
                 result = subprocess.run(cmd, capture_output=True, text=True,
                                        timeout=timeout)
@@ -320,7 +324,6 @@ class Executor:
                 console.print(f"[dim red]{result.stderr.strip()[:300]}[/dim red]")
             return result.returncode, result.stdout, result.stderr
         except subprocess.TimeoutExpired:
-            UI.warn(f"Timeout ({timeout}s) ejecutando: {' '.join(cmd[:5])}...")
             return -1, "", "timeout"
         except Exception as e:
             UI.error(f"Error ejecutando comando: {e}")
@@ -495,8 +498,8 @@ class Fases:
         else:
             UI.warn("No se encontraron recursos adicionales (respuesta 404 para la mayoria)")
 
-        UI.alerta_wazuh("100014", "10", "Escaneo web detectado: herramienta de fuzzing identificada en logs Nginx.")
-        self._narrar("El agente 008 ha detectado la herramienta de fuzzing en los logs Nginx. Alerta 100014 generada en tiempo real. El dashboard del cliente muestra el ataque contra su web sin depender de IDS perimetral: demostracion de defensa en profundidad Zero Trust.")
+        UI.alerta_wazuh("100040", "15", "AMENAZA CRITICA: patron de escaneo web detectado — multiples respuestas 503 identificaron herramienta automatizada. Regla 31123 activo correlacion 100040.")
+        self._narrar("El servidor web ha identificado el patron de escaneo y generado la alerta en tiempo real. La deteccion ocurrio desde dentro del servidor, no desde el perimetro: cualquier ataque que entre a esta red queda expuesto aunque evite el cortafuegos.")
 
     def fase_3_cowrie_ok(self):
         UI.print_fase_header(3, "HONEYPOT SSH — LOGIN EXITOSO", "hydra + ssh", Config.IP_BASE, Config.TARGET_COWRIE)
@@ -585,7 +588,6 @@ class Fases:
                 intentos_realizados += 1
             time.sleep(1)
         UI.ok(f"{intentos_realizados} intentos fallidos registrados contra Cowrie")
-        UI.alerta_wazuh("100010", "10", "T-Pot Cowrie: intento SSH fallido")
         UI.alerta_wazuh("100040", "15", "AMENAZA CRITICA consolidada — Active Response triggered")
         self._narrar("Wazuh ha detectado multiples intentos fallidos. Active Response ha enviado la orden a OPNsense. El firewall perimetral ha bloqueado la IP del atacante. El atacante ya no puede llegar a la DMZ desde esa IP.")
         self.ultima_ip_bloqueada = ip
@@ -654,27 +656,65 @@ class Fases:
         self._narrar("Rollback manual completo. Ambas capas de defensa limpiadas por el analista SOC. Sistema restaurado a estado operativo.")
 
     def fase_8_dionaea(self):
-        UI.print_fase_header(8, "SERVICIOS FALSOS — DIONAEA", "impacket", Config.IP_BASE, Config.TARGET_COWRIE)
-        self._narrar("Fase 8: El atacante explora servicios adicionales expuestos por el honeypot Dionaea: SMB (445), MSSQL (1433). Estos son servicios falsos que capturan malware y comportamiento del atacante sin riesgo para la infraestructura real.")
-        servicios = [
-            ("SMB", "445", "impacket-smbclient", f"{Config.COWRIE_USER}:{Config.COWRIE_PASS}@{Config.TARGET_COWRIE}"),
-            ("MSSQL", "1433", "impacket-mssqlclient", f"{Config.COWRIE_USER}:{Config.COWRIE_PASS}@{Config.TARGET_COWRIE}"),
-        ]
-        for nombre, puerto, tool, target in servicios:
-            self._info(f"Probando {nombre} en puerto {puerto}...")
-            rc, out, err = Executor.run(
-                [f"timeout 5 {tool} {target} -port {puerto} 2>/dev/null"],
-                timeout=10, shell=True, mostrar_output=False
+        UI.print_fase_header(8, "SERVICIOS FALSOS — DIONAEA", "smbclient", Config.IP_BASE, Config.TARGET_COWRIE)
+        self._narrar(
+            "Fase 8: En el reconocimiento inicial el atacante identifico dos servicios "
+            "adicionales en el servidor senuelo: una carpeta compartida de red — como la "
+            "unidad C: de cualquier ordenador Windows de oficina — y un servidor de base "
+            "de datos. Ahora los explota. Ambos son completamente falsos y estan disenados "
+            "para capturar al atacante mientras cree estar accediendo a informacion real."
+        )
+        table = Table(title="Servicios del servidor senuelo — identificados en Fase 1, ahora atacados", box=box.SIMPLE)
+        table.add_column("Puerto", style="cyan", justify="center")
+        table.add_column("Servicio", style="white")
+        table.add_column("Protocolo", style="dim")
+        table.add_row("445",  "Carpeta compartida de red (Windows)", "SMB")
+        table.add_row("1433", "Servidor de base de datos",           "MSSQL / TDS")
+        console.print(table)
+        self._narrar(
+            "Puerto 445 activo: el atacante ve la unidad C: compartida del servidor — "
+            "igual que la carpeta raiz de cualquier ordenador Windows de empresa. "
+            "Podria ver documentos internos, copiar informacion confidencial o instalar "
+            "software malicioso. Entra a explorar creyendo que es un sistema real."
+        )
+        console.print("[bold yellow]═══════════════════════════════════════════════════════════════[/bold yellow]")
+        console.print("[bold yellow]  SESION INTERACTIVA SMB — Carpeta compartida C$ del senuelo[/bold yellow]")
+        console.print("[bold yellow]  El atacante navega por la unidad de red falsa de Dionaea.[/bold yellow]")
+        console.print("[bold yellow]  Comandos: ls (ver ficheros) · dir (detalles) · exit (salir)[/bold yellow]")
+        console.print("[bold yellow]  Escribe exit para salir y continuar la demo.[/bold yellow]")
+        console.print("[bold yellow]═══════════════════════════════════════════════════════════════[/bold yellow]")
+        os.system(f"smbclient //{Config.TARGET_COWRIE}/C$ -N -m SMB2 2>/dev/null")
+        UI.ok("Sesion SMB cerrada — actividad del atacante registrada en Dionaea")
+        self._narrar(
+            "El atacante prueba el servidor de base de datos. La conexion falla: "
+            "el sistema usa un protocolo de cifrado de hace veinte anos que ningun servidor "
+            "real mantiene hoy. Es una firma caracteristica de trampa. "
+            "El intento de conexion queda igualmente registrado en el honeypot."
+        )
+        self._info(f"Intentando conexion a base de datos en {Config.TARGET_COWRIE}:1433...")
+        rc_tsql, _, _ = Executor.run(["which", "tsql"], mostrar_output=False)
+        if rc_tsql == 0:
+            Executor.run(
+                [f"tsql -H {Config.TARGET_COWRIE} -p 1433 -U sa -P '' 2>&1 | head -3"],
+                timeout=6, shell=True, mostrar_output=True
             )
-            if rc == 0:
-                UI.ok(f"Conexion {nombre} registrada por Dionaea (rc=0)")
-            elif rc == 124:
-                UI.ok(f"Sonda {nombre} enviada a Dionaea (timeout, conexion registrada)")
-            else:
-                UI.warn(f"Sonda {nombre} no conecto o fue rechazada (rc={rc})")
-            time.sleep(1)
-        UI.alerta_wazuh("100020", "10", "T-Pot Dionaea: conexion exploit detectada")
-        self._narrar("Dionaea ha registrado las conexiones a servicios falsos. El SOC tiene visibilidad de que protocolos intenta explotar el atacante. Esta informacion es valiosa para threat intelligence y para hardenear la infraestructura real.")
+        else:
+            Executor.run(
+                [f"timeout 4 impacket-mssqlclient sa:@{Config.TARGET_COWRIE} -port 1433 2>&1 | head -4"],
+                timeout=6, shell=True, mostrar_output=True
+            )
+        UI.warn("Protocolo de cifrado obsoleto — firma de sistema senuelo. Intento registrado.")
+        UI.alerta_wazuh(
+            "100020", "10",
+            "T-Pot Dionaea: sesion SMB registrada — carpeta compartida Windows accedida. "
+            "Comandos ejecutados y comportamiento del atacante capturados."
+        )
+        self._narrar(
+            "La trampa ha registrado exactamente que hizo el atacante: que carpetas exploro, "
+            "que ficheros intento copiar y con que herramienta. Con esta informacion el equipo "
+            "de seguridad puede identificar el perfil del atacante y reforzar los sistemas "
+            "reales antes de que encuentre algo de valor."
+        )
 
 # ==============================================================================
 # MENU PRINCIPAL Y ORQUESTACION
