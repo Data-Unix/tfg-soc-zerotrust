@@ -6,7 +6,7 @@
 
 *Detección distribuida · Respuesta activa automatizada · Honeypots · Zero Trust aplicado*
 
-*Coste en licencias de software: **0 €** · Funcionalidades equivalentes de mercado: **>35.000 €/año***
+*Coste en licencias de software: **0 €** · Funcionalidades equivalentes en el mercado: **>35.000 €/año***
 
 ---
 
