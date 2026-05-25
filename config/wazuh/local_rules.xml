@@ -391,3 +391,48 @@
   </rule>
 
 </group>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SUPRESIÓN DE RUIDO WINDOWS — nivel 0 (no almacenado, no alertado)
+     Aplica a VM104 (Win10 Cliente) y VM105 (WinServer 2022)
+     Rango IDs: 100201-100249
+     ══════════════════════════════════════════════════════════════════ -->
+<group name="windows,noise_suppression">
+
+  <!-- Logon Success (EventID 4624) — ~3500 hits/h en idle, no relevante para demo -->
+  <rule id="100201" level="0">
+    <if_sid>60106</if_sid>
+    <description>SUPPRESSED: Windows Logon Success - ruido operacional</description>
+  </rule>
+
+  <!-- Logoff (EventID 4634/4647) — ruido continuo de sesiones -->
+  <rule id="100202" level="0">
+    <if_sid>60103</if_sid>
+    <description>SUPPRESSED: Windows Logoff - ruido operacional</description>
+  </rule>
+
+  <!-- Logon Failed local bajo nivel (EventID 4625 nivel 3) -->
+  <rule id="100203" level="0">
+    <if_sid>60104</if_sid>
+    <description>SUPPRESSED: Windows Logon Failed bajo nivel - ruido operacional</description>
+  </rule>
+
+  <!-- Windows Defender real-time / scan notifications -->
+  <rule id="100204" level="0">
+    <if_sid>18107</if_sid>
+    <description>SUPPRESSED: Windows Defender notification - ruido operacional</description>
+  </rule>
+
+  <!-- Windows Defender scan completed -->
+  <rule id="100205" level="0">
+    <if_sid>18100</if_sid>
+    <description>SUPPRESSED: Windows Defender scan event - ruido operacional</description>
+  </rule>
+
+  <!-- Special Logon (EventID 4672) — token elevado en cada logon admin -->
+  <rule id="100206" level="0">
+    <if_sid>60108</if_sid>
+    <description>SUPPRESSED: Windows Special Logon - ruido operacional</description>
+  </rule>
+
+</group>
