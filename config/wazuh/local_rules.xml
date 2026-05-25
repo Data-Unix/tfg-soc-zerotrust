@@ -435,4 +435,11 @@
     <description>SUPPRESSED: Windows Special Logon - ruido operacional</description>
   </rule>
 
+  <!-- Suricata ET INFO Misc activity — ruido del propio laboratorio (T-Pot geoIP, Discord, ipify) -->
+  <rule id="100207" level="0">
+    <if_sid>100102</if_sid>
+    <field name="data.alert.category">^Misc activity$</field>
+    <description>SUPPRESSED: Suricata ET INFO Misc activity - ruido laboratorio</description>
+  </rule>
+
 </group>
