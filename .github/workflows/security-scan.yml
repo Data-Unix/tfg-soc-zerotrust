@@ -30,7 +30,7 @@ jobs:
           fi
 
           # SSH private keys
-          if grep -rn "BEGIN.*PRIVATE KEY\|BEGIN RSA\|BEGIN EC\|BEGIN DSA\|BEGIN OPENSSH" . 2>/dev/null; then
+          if grep -rn --exclude-dir=.github "BEGIN.*PRIVATE KEY\|BEGIN RSA\|BEGIN EC\|BEGIN DSA\|BEGIN OPENSSH" . 2>/dev/null; then
             echo "ERROR: Private key material found"
             FAIL=1
           fi
