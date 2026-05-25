@@ -69,6 +69,12 @@ El sistema replica los principios del **NIST SP 800-207** (*Zero Trust Architect
 
 <div align="center">
 
+![Demo Tool ZTT v1.1](media/demo_ztt.gif)
+
+</div>
+
+<div align="center">
+
 | Fase | Vector | Herramienta | Resultado |
 |------|--------|-------------|-----------|
 | **0** | Check status | ping / socket | `3/3 ONLINE` |
